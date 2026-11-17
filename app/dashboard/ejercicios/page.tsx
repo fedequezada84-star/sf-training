@@ -21,7 +21,6 @@ type Ejercicio = {
 export default function Ejercicios() {
   const [ejercicios, setEjercicios] = useState<Ejercicio[]>([]);
   const [loading, setLoading] = useState(true);
-  const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     async function cargarEjercicios() {
@@ -43,65 +42,7 @@ export default function Ejercicios() {
     }
 
     cargarEjercicios();
-
   }, []);
-   async function completarMultimedia() {
-    const supabase = createClient();
-
-    setMensaje("Completando imágenes y videos...");
-
-    const { data, error } = await supabase
-      .from("ejercicios")
-      .select("id, nombre, imagen_url, video_url")
-      .or("imagen_url.is.null,video_url.is.null");
-
-    if (error) {
-      console.error(error);
-      setMensaje("No se pudieron cargar los ejercicios.");
-      return;
-    }
-
-    let completados = 0;
-
-    for (const ejercicio of data ?? []) {
-      try {
-        const respuesta = await fetch(
-          `/api/youtube-search?q=${encodeURIComponent(
-            ejercicio.nombre
-          )}`
-        );
-
-        const resultado = await respuesta.json();
-
-        if (!resultado.video_url && !resultado.imagen_url) {
-          continue;
-        }
-
-        const { error: updateError } = await supabase
-          .from("ejercicios")
-          .update({
-            video_url: ejercicio.video_url ?? resultado.video_url,
-            imagen_url: ejercicio.imagen_url ?? resultado.imagen_url,
-          })
-          .eq("id", ejercicio.id);
-
-        if (!updateError) {
-          completados++;
-        }
-      } catch (error) {
-        console.error(
-          `No se pudo completar ${ejercicio.nombre}`,
-          error
-        );
-      }
-    }
-
-window.location.reload();
-
-    setMensaje(
-      `Proceso terminado. Se completaron ${completados} ejercicios.`
-    );
-  }
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white p-6">
@@ -110,13 +51,7 @@ window.location.reload();
         <p className="text-emerald-500 font-bold tracking-[0.25em]">
           SF TRAINING
         </p>
-<button
-  type="button"
-  onClick={completarMultimedia}
-  className="mt-5 bg-emerald-600 hover:bg-emerald-500 rounded-xl px-5 py-3 font-semibold"
->
-  🖼️ Completar imágenes y videos
-</button>
+
         <h1 className="text-4xl font-bold mt-2">
           Biblioteca de ejercicios
         </h1>
