@@ -365,8 +365,8 @@ setBusqueda("");
     disabled={guardando !== null}
     className="mt-6 w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-xl px-5 py-4 font-bold text-lg"
   >
-    {guardando !== null
-      ? "Agregando ejercicio..."
+{guardando !== null
+  ? "Agregando ejercicio..."
 : "+ Agregar otro ejercicio"}
   </button>
 )}

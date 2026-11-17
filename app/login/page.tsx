@@ -12,7 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
+const [mostrarPassword, setMostrarPassword] = useState(false);
  async function handleLogin(e: React.FormEvent) {
   e.preventDefault();
 
@@ -138,14 +138,24 @@ if (userError || !user) {
               Contraseña
             </label>
 
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-4 mb-7 outline-none focus:border-emerald-500"
-              required
-            />
+<div className="relative">
+  <input
+    type={mostrarPassword ? "text" : "password"}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    placeholder="Contraseña"
+    className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-4 pr-12"
+    required
+  />
+
+  <button
+    type="button"
+    onClick={() => setMostrarPassword(!mostrarPassword)}
+    className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+  >
+    {mostrarPassword ? "🙈" : "👁️"}
+  </button>
+</div>
 <div className="text-right mt-2 mb-4">
   <a
     href="/forgot-password"

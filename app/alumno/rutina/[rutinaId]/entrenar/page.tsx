@@ -57,6 +57,7 @@ export default function EntrenarRutina() {
   const [entrenamientoId, setEntrenamientoId] = useState<number | null>(
     null
   );
+  const [entrenamientoFinalizado, setEntrenamientoFinalizado] = useState(false);
   const [inicioEntrenamiento, setInicioEntrenamiento] = useState<string | null>(
   null
 );
@@ -405,10 +406,10 @@ completada:
 
     setFinalizando(false);
     setMensaje("Entrenamiento finalizado correctamente.");
+setEntrenamientoFinalizado(true);    
 
-    setTimeout(() => {
-      router.push(`/alumno/rutina/${rutinaId}`);
-    }, 1200);
+  
+
   }
 
   if (loading) {
@@ -461,7 +462,7 @@ completada:
         </p>
 
         <div className="mt-6">
-          {!entrenamientoId ? (
+{!entrenamientoId && !entrenamientoFinalizado ? (
             <button
               onClick={iniciarEntrenamiento}
               disabled={iniciando || !alumnoId}
@@ -471,7 +472,7 @@ completada:
                 ? "Iniciando..."
                 : "▶ Iniciar entrenamiento"}
             </button>
-          ) : (
+) : entrenamientoFinalizado ? (
             <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4">
 <div className="text-emerald-400 font-bold"></div>
                 Entrenamiento en curso
@@ -500,8 +501,12 @@ completada:
                   </div>
                 )}
             </div>
-          )}
-        </div>
+) : (
+  <div className="mt-6 bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-emerald-400">
+  ✓ Entrenamiento finalizado
+</div>      
+  )}
+  </div>
 
         {mensaje && (
           <div className="mt-6 bg-neutral-900 border border-neutral-700 rounded-xl p-4">
@@ -638,7 +643,7 @@ completada:
           ))}
         </section>
 
-        {entrenamientoId && (
+{entrenamientoId && !entrenamientoFinalizado && (
           <section className="mt-10">
             <label className="block text-lg font-bold mb-2">
               ¿Cómo te sentiste?
