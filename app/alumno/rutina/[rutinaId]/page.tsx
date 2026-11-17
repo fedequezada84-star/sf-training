@@ -218,7 +218,7 @@ export default function RutinaAlumno() {
               }
               className="bg-emerald-600 hover:bg-emerald-500 rounded-lg px-5 py-3 font-bold"
             >
-              ▶ Iniciar entrenamiento
+▶ Ver entrenamiento
             </button>
           )}
         </div>
