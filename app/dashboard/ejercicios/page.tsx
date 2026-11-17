@@ -53,7 +53,8 @@ export default function Ejercicios() {
     const { data, error } = await supabase
       .from("ejercicios")
       .select("id, nombre, imagen_url, video_url")
-      .or("imagen_url.is.null,video_url.is.null");
+.or("imagen_url.is.null,video_url.is.null")
+.limit(5);
 
     if (error) {
       console.error(error);
