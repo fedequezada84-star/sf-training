@@ -395,7 +395,10 @@ completada:
 
     setFinalizando(false);
     setMensaje("Entrenamiento finalizado correctamente.");
-setEntrenamientoFinalizado(true);    
+setEntrenamientoId(null);
+setEntrenamientoFinalizado(false);
+setInicioEntrenamiento(null);
+setSegundosEntrenamiento(0);   
 
   
 
@@ -490,11 +493,7 @@ setEntrenamientoFinalizado(true);
                   </div>
                 )}
             </div>
-) : (
-  <div className="mt-6 bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-emerald-400">
-  ✓ Entrenamiento finalizado
-</div>      
-  )}
+) : null}
   </div>
 
         {mensaje && (
