@@ -269,18 +269,7 @@ useEffect(() => {
       return nuevas;
     });
   }
-function completarEjercicio(rutinaEjercicioId: number) {
-  setSeriesCompletadas((actual) => {
-    const nuevas = { ...actual };
 
-    const cantidadSeries =
-      seriesRealizadas[rutinaEjercicioId]?.length ?? 0;
-
-    nuevas[rutinaEjercicioId] = Array(cantidadSeries).fill(true);
-
-    return nuevas;
-  });
-}
 
   async function iniciarEntrenamiento() {
     if (iniciando || entrenamientoId) return;
@@ -619,17 +608,7 @@ setEntrenamientoFinalizado(true);
                   )
                 )}
               </div>
-{entrenamientoId && (
-  <button
-    type="button"
-    onClick={() => completarEjercicio(ejercicio.id)}
-    className="mt-4 w-full rounded-lg px-4 py-3 font-bold bg-emerald-600 hover:bg-emerald-500 text-white"
-  >
-    {seriesCompletadas[ejercicio.id]?.every(Boolean)
-      ? "✓ Ejercicio completado"
-      : "Marcar ejercicio como completado"}
-  </button>
-)}
+
               <div className="mt-5 bg-neutral-800 rounded-lg p-4">
                 <p className="text-neutral-400 text-sm">
                   Descanso
