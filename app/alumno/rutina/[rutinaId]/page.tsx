@@ -17,8 +17,7 @@ type Ejercicio = {
   nombre: string;
   grupo_muscular: string;
   tipo: string;
-  video_url: string | null;
-  imagen_url: string | null;
+
   musculo_principal: string | null;
   musculos_secundarios: string | null;
   imagen_musculos_url: string | null;
@@ -268,42 +267,7 @@ export default function RutinaAlumno() {
     {item.ejercicio.musculos_secundarios}
   </p>
 )}
-{item.ejercicio.imagen_url && (
-  <details className="mt-4">
-    <summary className="cursor-pointer text-emerald-500 hover:text-emerald-400 font-semibold">
-      🖼️ Ver imagen
-    </summary>
 
-    <div className="mt-3">
-      <img
-        src={item.ejercicio.imagen_url}
-        alt={`Demostración de ${item.ejercicio.nombre}`}
-        className="w-full max-w-md rounded-xl border border-neutral-700"
-      />
-    </div>
-  </details>
-)}
-
-{item.ejercicio.video_url && (
-  <details className="mt-5">
-    <summary className="cursor-pointer text-emerald-500 hover:text-emerald-400 font-semibold">
-      ▶ Ver demostración
-    </summary>
-
-    <div className="mt-3 w-full max-w-2xl aspect-video">
-      <iframe
-        src={item.ejercicio.video_url.replace(
-          "watch?v=",
-          "embed/"
-        )}
-        title={`Video de ${item.ejercicio.nombre}`}
-        className="w-full h-full rounded-xl border border-neutral-700"
-        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-    </div>
-  </details>
-)}
   </div>
 )}
 

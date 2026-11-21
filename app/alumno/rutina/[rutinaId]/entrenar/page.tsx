@@ -15,8 +15,7 @@ type Ejercicio = {
   nombre: string;
   grupo_muscular: string;
   tipo: string;
-  video_url: string | null;
-  imagen_url: string | null;
+
 };
 
 type RutinaEjercicio = {
@@ -149,7 +148,7 @@ export default function EntrenarRutina() {
       const { data: ejerciciosData, error: ejerciciosDataError } =
         await supabase
           .from("ejercicios")
-.select("id, nombre, grupo_muscular, tipo, video_url, imagen_url")
+.select("id, nombre, grupo_muscular, tipo")
           .in("id", ejercicioIds);
 
       if (ejerciciosDataError) {
@@ -190,22 +189,36 @@ ejerciciosCompletos.forEach((item) => {
 });
 
 setSeriesCompletadas(completadasIniciales);
-        const { data: entrenamientoActivo } = await supabase
-        .from("entrenamiento_sesiones")
-        .select("id, started_at, comentario")
-        .eq("alumno_id", alumno.id)
-        .eq("rutina_id", rutinaId)
-        .eq("estado", "en_curso")
-        .order("id", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+const { data: ultimaSesion, error: sesionError } = await supabase
+  .from("entrenamiento_sesiones")
+  .select("id, started_at, comentario, estado")
+  .eq("alumno_id", alumno.id)
+  .eq("rutina_id", rutinaId)
+  .order("id", { ascending: false })
+  .limit(1)
+  .maybeSingle();
 
-      if (entrenamientoActivo) {
-        setEntrenamientoId(entrenamientoActivo.id);
-        setInicioEntrenamiento(entrenamientoActivo.started_at);
-        setComentario(entrenamientoActivo.comentario ?? "");
-      }
-      setLoading(false);
+if (sesionError) {
+  console.error(sesionError);
+  setMensaje("No se pudo recuperar el estado del entrenamiento.");
+  setLoading(false);
+  return;
+}
+
+if (ultimaSesion) {
+  setEntrenamientoId(ultimaSesion.id);
+  setComentario(ultimaSesion.comentario ?? "");
+
+  if (ultimaSesion.estado === "finalizado") {
+    setEntrenamientoFinalizado(true);
+    setInicioEntrenamiento(null);
+  } else if (ultimaSesion.estado === "en_curso") {
+    setEntrenamientoFinalizado(false);
+    setInicioEntrenamiento(ultimaSesion.started_at);
+  }
+}
+
+setLoading(false);
     }
 
     if (rutinaId) {
@@ -393,12 +406,11 @@ completada:
       return;
     }
 
-    setFinalizando(false);
-    setMensaje("Entrenamiento finalizado correctamente.");
-setEntrenamientoId(null);
-setEntrenamientoFinalizado(false);
+setFinalizando(false);
+setMensaje("Entrenamiento finalizado correctamente.");
+setEntrenamientoFinalizado(true);
 setInicioEntrenamiento(null);
-setSegundosEntrenamiento(0);   
+setSegundosEntrenamiento(0);  
 
   
 
@@ -452,7 +464,13 @@ setSegundosEntrenamiento(0);
         <p className="text-emerald-400 mt-2">
           {rutina.tipo}
         </p>
-
+{entrenamientoFinalizado && (
+  <div className="mt-6 bg-emerald-900/30 border border-emerald-700 rounded-xl p-4">
+    <p className="text-emerald-400 font-bold">
+      ✓ Entrenamiento finalizado
+    </p>
+  </div>
+)}
         <div className="mt-6">
 {!entrenamientoId && !entrenamientoFinalizado ? (
             <button
@@ -464,7 +482,7 @@ setSegundosEntrenamiento(0);
                 ? "Iniciando..."
                 : "▶ Iniciar entrenamiento"}
             </button>
-) : entrenamientoFinalizado ? (
+) : entrenamientoId && !entrenamientoFinalizado ? (
             <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4">
 <div className="text-emerald-400 font-bold"></div>
                 Entrenamiento en curso
@@ -524,40 +542,9 @@ setSegundosEntrenamiento(0);
                   {ejercicio.ejercicio.grupo_muscular}
                 </p>
               )}
-{ejercicio.ejercicio?.imagen_url && (
-  <details className="mt-4">
-    <summary className="cursor-pointer text-emerald-500 font-semibold">
-      🖼️ Ver imagen
-    </summary>
 
-    <img
-      src={ejercicio.ejercicio.imagen_url}
-      alt={`Demostración de ${ejercicio.ejercicio.nombre}`}
-      className="mt-3 w-full max-w-md rounded-xl border border-neutral-700"
-    />
-  </details>
-)}
 
-{ejercicio.ejercicio?.video_url && (
-  <details className="mt-4">
-    <summary className="cursor-pointer text-emerald-500 font-semibold">
-      ▶ Ver demostración
-    </summary>
 
-    <div className="mt-3 w-full max-w-2xl aspect-video">
-      <iframe
-        src={ejercicio.ejercicio.video_url.replace(
-          "watch?v=",
-          "embed/"
-        )}
-        title={`Video de ${ejercicio.ejercicio.nombre}`}
-        className="w-full h-full rounded-xl border border-neutral-700"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-    </div>
-  </details>
-)}
               <div className="mt-6 space-y-4">
                 {(seriesRealizadas[ejercicio.id] ?? []).map(
                   (serie, serieIndex) => (
