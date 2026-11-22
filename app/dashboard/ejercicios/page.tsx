@@ -122,11 +122,24 @@ export default function Ejercicios() {
                       {ejercicio.tipo}
                     </p>
 
-                    {ejercicio.descripcion && (
-                      <p className="text-neutral-400 mt-3">
-                        {ejercicio.descripcion}
-                      </p>
-                    )}
+{ejercicio.descripcion && (
+  <p className="text-neutral-400 mt-3">
+    {ejercicio.descripcion}
+  </p>
+)}
+
+{ejercicio.imagen_url && (
+  <div className="mt-4">
+    <p className="text-sm text-neutral-400 mb-2">
+      Imagen del ejercicio
+    </p>
+    <img
+      src={ejercicio.imagen_url}
+      alt={`Demostración de ${ejercicio.nombre}`}
+      className="w-full max-w-md rounded-xl border border-neutral-800"
+    />
+  </div>
+)}
                      <div className="text-xs text-neutral-500 mt-4 space-y-1">
               <p>
                 Creado:{" "}
