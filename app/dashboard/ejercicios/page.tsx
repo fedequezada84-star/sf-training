@@ -318,18 +318,18 @@ export default function Ejercicios() {
                         </p>
                       )}
 
-                      {ejercicio.imagen_url && (
-                        <div className="mt-4">
-                          <p className="text-sm text-neutral-400 mb-2">
-                            Imagen del ejercicio
-                          </p>
-                          <img
-                            src={ejercicio.imagen_url}
-                            alt={`Imagen de referencia de ${ejercicio.nombre}`}
-                            className="w-full max-w-md rounded-xl border border-neutral-800"
-                          />
-                        </div>
-                      )}
+{ejercicio.imagen_musculos_url && (
+  <div className="mt-4">
+    <p className="text-sm text-neutral-400 mb-2">
+      Músculo trabajado
+    </p>
+    <img
+      src={ejercicio.imagen_musculos_url}
+      alt={`Músculos trabajados en ${ejercicio.nombre}`}
+      className="w-full max-w-md rounded-xl border border-neutral-800 bg-white"
+    />
+  </div>
+)}
 
                       {ejercicio.video_url && (
                         <a
@@ -342,18 +342,7 @@ export default function Ejercicios() {
                         </a>
                       )}
 
-                      {ejercicio.imagen_musculos_url && (
-                        <div className="mt-4">
-                          <p className="text-sm text-neutral-400 mb-2">
-                            Músculos trabajados
-                          </p>
-                          <img
-                            src={ejercicio.imagen_musculos_url}
-                            alt={`Músculos trabajados en ${ejercicio.nombre}`}
-                            className="w-full max-w-md rounded-xl border border-neutral-800"
-                          />
-                        </div>
-                      )}
+
 
                       <div className="text-xs text-neutral-500 mt-4 space-y-1">
                         <p>
