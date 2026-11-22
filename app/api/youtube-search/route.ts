@@ -53,7 +53,7 @@ export async function GET(request: Request) {
     busqueda.searchParams.set("part", "snippet");
     busqueda.searchParams.set(
       "q",
-      `${q} ejercicio técnica demostración`
+`${q ? `"${q}"` : ""} ejercicio demostración -rutina -entrenamiento`
     );
     busqueda.searchParams.set("type", "video");
     busqueda.searchParams.set("videoDuration", "short");
