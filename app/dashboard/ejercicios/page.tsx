@@ -405,16 +405,9 @@ export default function Ejercicios() {
                             Propuesta para revisar
                           </p>
 
-                          <img
-                            src={propuesta.imagen_url}
-                            alt={`Miniatura propuesta para ${ejercicio.nombre}`}
-                            className="w-full max-w-sm rounded-lg"
-                          />
 
-                          <p className="text-xs text-neutral-400 mt-2">
-                            La imagen es la miniatura del video,
-                            no una fotografía independiente.
-                          </p>
+
+
 
                           <a
                             href={propuesta.video_url}
