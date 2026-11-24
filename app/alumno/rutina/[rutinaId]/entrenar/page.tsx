@@ -15,6 +15,8 @@ type Ejercicio = {
   nombre: string;
   grupo_muscular: string;
   tipo: string;
+  imagen_url: string | null;
+  video_url: string | null;
 
 };
 
@@ -148,7 +150,7 @@ const searchParams = useSearchParams();
       const { data: ejerciciosData, error: ejerciciosDataError } =
         await supabase
           .from("ejercicios")
-.select("id, nombre, grupo_muscular, tipo")
+.select("id, nombre, grupo_muscular, tipo, imagen_url, video_url")
           .in("id", ejercicioIds);
 
       if (ejerciciosDataError) {
@@ -537,11 +539,46 @@ setSegundosEntrenamiento(0);
                   "Ejercicio"}
               </h2>
 
-              {ejercicio.ejercicio && (
-                <p className="text-neutral-400 mt-1">
-                  {ejercicio.ejercicio.grupo_muscular}
-                </p>
-              )}
+{ejercicio.ejercicio && (
+  <>
+    <p className="text-neutral-400 mt-1">
+      {ejercicio.ejercicio.grupo_muscular}
+    </p>
+
+    {ejercicio.ejercicio.imagen_url && (
+      <details className="mt-4">
+        <summary className="cursor-pointer text-emerald-500 font-semibold">
+          🖼️ Ver imagen
+        </summary>
+
+        <img
+          src={ejercicio.ejercicio.imagen_url}
+          alt={`Demostración de ${ejercicio.ejercicio.nombre}`}
+          className="mt-3 w-full max-w-2xl rounded-xl border border-neutral-700"
+        />
+      </details>
+    )}
+  {ejercicio.ejercicio.video_url && (
+  <details className="mt-4">
+    <summary className="cursor-pointer text-emerald-500 font-semibold">
+      ▶️ Ver demostración
+    </summary>
+
+    <div className="mt-3 w-full max-w-2xl aspect-video">
+      <iframe
+        src={ejercicio.ejercicio.video_url.replace(
+          "watch?v=",
+          "embed/"
+        )}
+        title={`Video de ${ejercicio.ejercicio.nombre}`}
+        className="w-full h-full rounded-xl border border-neutral-700"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  </details>
+)}</>
+)}
 
 
 
