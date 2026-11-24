@@ -213,11 +213,11 @@ export default function RutinaAlumno() {
           {ejercicios.length > 0 && (
             <button
               onClick={() =>
-                router.push(`/alumno/rutina/${rutinaId}/entrenar`)
+router.push(`/alumno/rutina/${rutinaId}/entrenar?autoStart=1`)
               }
               className="bg-emerald-600 hover:bg-emerald-500 rounded-lg px-5 py-3 font-bold"
             >
-▶ Ver entrenamiento
+▶ Iniciar entrenamiento
             </button>
           )}
         </div>

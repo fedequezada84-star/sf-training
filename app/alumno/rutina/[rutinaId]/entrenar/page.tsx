@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 
 type Rutina = {
@@ -46,7 +46,7 @@ function createClient() {
 export default function EntrenarRutina() {
   const params = useParams();
   const router = useRouter();
-
+const searchParams = useSearchParams();
   const rutinaId = Number(params.rutinaId);
 
   const [rutina, setRutina] = useState<Rutina | null>(null);
@@ -205,19 +205,12 @@ if (sesionError) {
   return;
 }
 
-if (ultimaSesion) {
+if (ultimaSesion && ultimaSesion.estado === "en_curso") {
   setEntrenamientoId(ultimaSesion.id);
   setComentario(ultimaSesion.comentario ?? "");
-
-  if (ultimaSesion.estado === "finalizado") {
-    setEntrenamientoFinalizado(true);
-    setInicioEntrenamiento(null);
-  } else if (ultimaSesion.estado === "en_curso") {
-    setEntrenamientoFinalizado(false);
-    setInicioEntrenamiento(ultimaSesion.started_at);
-  }
+  setEntrenamientoFinalizado(false);
+  setInicioEntrenamiento(ultimaSesion.started_at);
 }
-
 setLoading(false);
     }
 
@@ -226,6 +219,19 @@ setLoading(false);
     }
   }, [rutinaId, router]);
   useEffect(() => {
+  const autoStart = searchParams.get("autoStart") === "1";
+
+  if (
+    autoStart &&
+    alumnoId &&
+    !entrenamientoId &&
+    !loading
+  ) {
+    iniciarEntrenamiento();
+  }
+}, [alumnoId, entrenamientoId, loading, searchParams]);
+
+useEffect(() => {
   if (!entrenamientoId) {
     setSegundosEntrenamiento(0);
     return;
@@ -464,13 +470,7 @@ setSegundosEntrenamiento(0);
         <p className="text-emerald-400 mt-2">
           {rutina.tipo}
         </p>
-{entrenamientoFinalizado && (
-  <div className="mt-6 bg-emerald-900/30 border border-emerald-700 rounded-xl p-4">
-    <p className="text-emerald-400 font-bold">
-      ✓ Entrenamiento finalizado
-    </p>
-  </div>
-)}
+
         <div className="mt-6">
 {!entrenamientoId && !entrenamientoFinalizado ? (
             <button
